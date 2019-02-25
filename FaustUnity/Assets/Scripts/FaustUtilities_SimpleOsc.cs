@@ -244,8 +244,10 @@ namespace FaustUtilities_SimpleOsc {
 
 		private IntPtr _context;
 
-        #if UNITY_EDITOR_OSX || UNITY_EDITOR_WIN || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_WSA || UNITY_WSA_10_0 || UNITY_IOS
+        #if UNITY_EDITOR_OSX || UNITY_EDITOR_WIN || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_WSA || UNITY_WSA_10_0
         const string _dllName = "libFaustPlugin_SimpleOsc";
+		#elif UNITY_IOS
+		const string _dllName = "__Internal";
         #elif UNITY_EDITOR || UNITY_ANDROID || UNITY_STANDALONE_LINUX 
         const string _dllName = "FaustPlugin_SimpleOsc";
         #else
