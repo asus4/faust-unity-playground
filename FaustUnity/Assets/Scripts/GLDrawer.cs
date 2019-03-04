@@ -32,10 +32,11 @@ namespace Faust
             material.SetPass(0);
             GL.PushMatrix();
             GL.LoadPixelMatrix();
-            OnDraw();
+            if (OnDraw != null)
+            {
+                OnDraw();
+            }
             GL.PopMatrix();
         }
-
-
     }
 }

@@ -1,14 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Video;
 
 namespace Faust
 {
-    [RequireComponent(typeof(AudioListener), typeof(GLDrawer))]
-    public class FFTDataSave : MonoBehaviour
+    [RequireComponent(typeof(AudioListener), typeof(GLDrawer), typeof(VideoPlayer))]
+    public class SpectrumDataRecorder : MonoBehaviour
     {
-        [SerializeField] SpectrumData data;
+        [SerializeField] SpectrumData data = null;
 
         [SerializeField] FFTWindow window = FFTWindow.Hanning;
 
@@ -21,28 +23,35 @@ namespace Faust
 
         float[] windowFunction;
 
+        VideoPlayer videoPlayer;
         void Awake()
         {
             Application.targetFrameRate = 60;
-
-            int bufferLength, numBuffers;
-            AudioSettings.GetDSPBufferSize(out bufferLength, out numBuffers);
-            Debug.Log($"buffer length:{bufferLength} num:{numBuffers}");
         }
 
         void Start()
         {
             GetComponent<GLDrawer>().OnDraw += OnGLDraw;
+            data.ResetData();
+
+            videoPlayer = GetComponent<VideoPlayer>();
+            videoPlayer.loopPointReached += OnVideoEnd;
+            videoPlayer.Play();
         }
 
         void OnDestroy()
         {
             GetComponent<GLDrawer>().OnDraw -= OnGLDraw;
+            videoPlayer.loopPointReached -= OnVideoEnd;
         }
 
         void Update()
         {
-            AudioListener.GetSpectrumData(spectrum, 0, window);
+            if (spectrum != null)
+            {
+                AudioListener.GetSpectrumData(spectrum, 0, window);
+                data.Add(spectrum);
+            }
         }
 
 #if UNITY_EDITOR
@@ -69,6 +78,15 @@ namespace Faust
             {
                 DrawWaves(spectrumB, Color.red, 0.5f);
             }
+        }
+
+        void OnVideoEnd(VideoPlayer player)
+        {
+            Debug.Log("On Video End");
+            data.SaveToFile(SpectrumData.DataPath(player.clip));
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#endif
         }
 
         void OnAudioFilterRead(float[] data, int channels)
