@@ -211,8 +211,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d088a86f017624b6ea1ead62eaba7868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gainMode: 0
   data: {fileID: 11400000, guid: ee3811ea201bb4770b94c5a09b72c597, type: 2}
-  masterGain: 1
+  masterGain: 5
 --- !u!114 &1501484873
 MonoBehaviour:
   m_ObjectHideFlags: 0

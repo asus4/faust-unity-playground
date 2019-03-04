@@ -39,6 +39,7 @@ namespace Faust
 
         SortedList<float, int> peaks;
 
+        public const int PEAKS = 32;
         static int BufferLength;
         static int SampleRate;
 
@@ -58,7 +59,7 @@ namespace Faust
 
         public void Add(float[] data)
         {
-            var frame = GetPeeks(data, 16);
+            var frame = GetPeeks(data, PEAKS);
             // Debug.Log(frame);
             frames.Add(frame);
         }
@@ -138,7 +139,7 @@ namespace Faust
                 n = data[i];
             }
 
-            var last = peaks.Count > 16 ? peaks.Skip(peaks.Count - 16) : peaks;
+            var last = peaks.Count > count ? peaks.Skip(peaks.Count - count) : peaks;
 
             // Debug.Log($"last: {last.Count()}");
 
