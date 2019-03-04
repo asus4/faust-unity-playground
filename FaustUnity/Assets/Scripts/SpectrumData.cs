@@ -100,10 +100,16 @@ namespace Faust
             }
         }
 
-        public static float GetFrequencyForIndex(int index)
+        public static float IndexToFrequency(int index)
         {
-            return (float)index * SampleRate / BufferLength;
+            return (float)index * ((float)SampleRate / (float)BufferLength / 2.0f);
         }
+
+        public static int FrequencyToIndex(float frequency)
+        {
+            return (int)(frequency / ((float)SampleRate / (float)BufferLength / 2.0f));
+        }
+
 
         public static string DataPath(VideoClip clip)
         {

@@ -10,7 +10,7 @@ namespace Faust
     public class SpectrumDataPlayer : MonoBehaviour
     {
         [SerializeField] SpectrumData data = null;
-        [SerializeField] float masterGain = 1;
+        [SerializeField, Range(0f, 100f)] float masterGain = 1;
 
         FaustPlugin_SimpleOsc osc;
 
@@ -29,16 +29,15 @@ namespace Faust
             if (currentIndex < data.frames.Count)
             {
                 var frame = data.frames[currentIndex];
-
                 for (int i = 0; i < frame.Count; i++)
                 {
-                    float freq = SpectrumData.GetFrequencyForIndex(frame.index[i]);
+                    float freq = SpectrumData.IndexToFrequency(frame.index[i]);
                     float gain = frame.level[i];
                     SetParameter(i, freq, gain);
                 }
                 for (int i = frame.Count; i < 16; i++)
                 {
-                    SetParameter(i, 440, 0);
+                    SetParameter(i, 50, 0);
                 }
             }
             currentIndex++;
@@ -46,8 +45,9 @@ namespace Faust
 
         void SetParameter(int index, float frequency, float gain)
         {
-            Debug.Log($"{index}: {frequency:0.0} : {gain:0.000}");
             osc.setParameter(index * 2, frequency);
+            // osc.setParameter(index * 2 + 1, Mathf.Sqrt(gain * masterGain));
+            // osc.setParameter(index * 2 + 1, gain * gain * masterGain);
             osc.setParameter(index * 2 + 1, gain * masterGain);
         }
     }
