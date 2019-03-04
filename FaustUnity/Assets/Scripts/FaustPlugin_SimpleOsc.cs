@@ -17,7 +17,7 @@ using FaustUtilities_SimpleOsc;
 [RequireComponent(typeof(AudioSource))] // Automatically attached the script to an Audiosource
 public class FaustPlugin_SimpleOsc: MonoBehaviour {
 	// Array containing the value of each parameter, has to be public to be serialized by the Unity engine
-	public float[] parameters = new float[32];
+	public float[] parameters = new float[65];
 	private Faust_Context ctx;
 
 	// Initializes the interface between the plugin and Unity
